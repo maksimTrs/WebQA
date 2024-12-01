@@ -24,6 +24,9 @@ object WebDriverFactory {
         WebDriverManager.chromedriver().setup()
         return ChromeDriver(ChromeOptions().apply {
             addArguments("--start-maximized")
+            //addArguments("--disable-notifications")
+            addArguments("--disable-extensions")
+            addArguments("--incognito")
         }).apply {
             manage().window().size = windowSize
         }
