@@ -19,7 +19,6 @@ class TestListener : ITestListener {
     override fun onTestFailure(result: ITestResult) {
         logger.error("Test failed: ${result.method.methodName}")
         logger.error("Failure details: ${result.throwable.message}")
-        // TODO: Add screenshot capture for UI tests here
     }
 
     override fun onTestSkipped(result: ITestResult) {

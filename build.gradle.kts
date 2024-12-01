@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.9.0"
-    id("io.qameta.allure") version "2.11.2"
+    id("io.qameta.allure") version "2.12.0"
 }
 
 group = "com.webqa"
@@ -32,8 +32,8 @@ dependencies {
     implementation("io.rest-assured:kotlin-extensions:5.3.1")
 
     // Allure
-    implementation("io.qameta.allure:allure-testng:2.22.2")
-    implementation("io.qameta.allure:allure-rest-assured:2.22.2")
+    implementation("io.qameta.allure:allure-testng:2.29.0")
+    implementation("io.qameta.allure:allure-rest-assured:2.29.0")
 
     // Data Generation
     implementation("net.datafaker:datafaker:2.0.1")

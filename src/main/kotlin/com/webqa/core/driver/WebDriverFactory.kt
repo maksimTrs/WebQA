@@ -1,36 +1,45 @@
-package com.webqa.core.driver
-
-import com.webqa.core.config.Configuration
+import WebDriverFactory.Browser.CHROME
+import WebDriverFactory.Browser.FIREFOX
+import com.webqa.core.config.Configuration.browser
 import io.github.bonigarcia.wdm.WebDriverManager
+import org.openqa.selenium.Dimension
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.firefox.FirefoxDriver
+import org.openqa.selenium.firefox.FirefoxOptions
 
 object WebDriverFactory {
-    sealed class Browser {
-        object Chrome : Browser()
-        object Firefox : Browser()
+    enum class Browser { CHROME, FIREFOX }
+
+    fun createDriver(
+        browser: Browser = getBrowserFromConfig(),
+        windowSize: Dimension = Dimension(1920, 1080)
+    ): WebDriver = when (browser) {
+        CHROME -> createChromeDriver(windowSize)
+        FIREFOX -> createFirefoxDriver(windowSize)
     }
 
-    fun createDriver(): WebDriver {
-        return when (getBrowser()) {
-            is Browser.Chrome -> {
-                WebDriverManager.chromedriver().setup()
-                ChromeDriver()
-            }
-
-            is Browser.Firefox -> {
-                WebDriverManager.firefoxdriver().setup()
-                FirefoxDriver()
-            }
+    private fun createChromeDriver(windowSize: Dimension): WebDriver {
+        WebDriverManager.chromedriver().setup()
+        return ChromeDriver(ChromeOptions().apply {
+            addArguments("--start-maximized")
+        }).apply {
+            manage().window().size = windowSize
         }
     }
 
-    private fun getBrowser(): Browser {
-        return when (Configuration.browser.lowercase()) {
-            "chrome" -> Browser.Chrome
-            "firefox" -> Browser.Firefox
-            else -> Browser.Chrome // Default to Chrome if unrecognized
+    private fun createFirefoxDriver(windowSize: Dimension): WebDriver {
+        WebDriverManager.firefoxdriver().setup()
+        return FirefoxDriver(FirefoxOptions()).apply {
+            manage().window().size = windowSize
         }
     }
+
+    private fun getBrowserFromConfig(): Browser =
+        when (browser.lowercase()) {
+            "chrome" -> CHROME
+            "firefox" -> FIREFOX
+            else -> CHROME // Default to Chrome if unrecognized
+        }
 }
