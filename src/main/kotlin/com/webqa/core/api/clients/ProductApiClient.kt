@@ -23,7 +23,7 @@ class ProductApiClient : ApiClient() {
     }
 
     fun createOrder(authToken: String, productId: String, quantity: Int, cardDetails: Map<String, Any>): ApiResponse {
-      return  Given {
+        return Given {
             spec(requestSpec)
             header("Authorization", authToken)
             body(

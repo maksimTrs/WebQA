@@ -7,17 +7,30 @@ import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.firefox.FirefoxDriver
 
 object WebDriverFactory {
+    sealed class Browser {
+        object Chrome : Browser()
+        object Firefox : Browser()
+    }
+
     fun createDriver(): WebDriver {
-        return when (Configuration.browser.lowercase()) {
-            "chrome" -> {
+        return when (getBrowser()) {
+            is Browser.Chrome -> {
                 WebDriverManager.chromedriver().setup()
                 ChromeDriver()
             }
-            "firefox" -> {
+
+            is Browser.Firefox -> {
                 WebDriverManager.firefoxdriver().setup()
                 FirefoxDriver()
             }
-            else -> throw IllegalArgumentException("Unsupported browser: ${Configuration.browser}")
+        }
+    }
+
+    private fun getBrowser(): Browser {
+        return when (Configuration.browser.lowercase()) {
+            "chrome" -> Browser.Chrome
+            "firefox" -> Browser.Firefox
+            else -> Browser.Chrome // Default to Chrome if unrecognized
         }
     }
 }

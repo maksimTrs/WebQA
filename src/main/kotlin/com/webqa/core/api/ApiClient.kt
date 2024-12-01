@@ -1,6 +1,7 @@
 package com.webqa.core.api
 
 import com.webqa.core.config.Configuration
+import io.qameta.allure.restassured.AllureRestAssured
 import io.restassured.RestAssured
 import io.restassured.builder.RequestSpecBuilder
 import io.restassured.filter.log.RequestLoggingFilter
@@ -14,6 +15,7 @@ abstract class ApiClient {
         .setContentType(ContentType.JSON)
         .addFilter(RequestLoggingFilter())
         .addFilter(ResponseLoggingFilter())
+        .addFilter(AllureRestAssured())
         .build()
 
     init {

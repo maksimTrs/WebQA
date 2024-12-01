@@ -1,7 +1,6 @@
 package com.webqa.core.ui
 
 import com.webqa.core.config.Configuration
-import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.PageFactory
@@ -24,8 +23,10 @@ abstract class BasePage(protected val driver: WebDriver) {
             .until(ExpectedConditions.elementToBeClickable(element))
     }
 
-    protected fun waitForElements(by: By): List<WebElement> {
+    protected fun waitForElements(elements: List<WebElement>) {
         return WebDriverWait(driver, Duration.ofSeconds(Configuration.timeout.toLong()))
-            .until(ExpectedConditions.presenceOfAllElementsLocatedBy(by))
+            .until {
+                (elements.all { it.isDisplayed })
+            }
     }
 }

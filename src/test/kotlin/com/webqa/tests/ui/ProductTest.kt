@@ -1,8 +1,5 @@
 package com.webqa.tests.ui
 
-import com.webqa.core.config.Configuration
-import com.webqa.core.config.Configuration.userEmail
-import com.webqa.core.config.Configuration.userPass
 import com.webqa.core.ui.pages.HomePage
 import com.webqa.core.ui.pages.LoginPage
 import com.webqa.tests.BaseTest
@@ -19,12 +16,12 @@ class ProductTest : BaseTest() {
     fun setup() {
         homePage = HomePage(driver)
         loginPage = LoginPage(driver)
-        
+
         // Login before each test
-        driver.get(Configuration.baseUrl)
+        driver.get(baseUrl)
         homePage.clickLogin()
         loginPage.login(userEmail, userPass)
-        
+
         // Wait for successful login by checking the email is displayed
         assertThat(homePage.getLoggedInUserEmail())
             .isEqualTo(userEmail)
@@ -41,7 +38,8 @@ class ProductTest : BaseTest() {
     @Description("Verify product can be added to cart")
     fun testAddProductToCart() {
         homePage.addProductToCart(0)
-        // Add assertions for cart validation
-        // This would require implementing cart page object and related functionality
+
+        assertThat(homePage.isChartCartDisplayed()).isTrue
+        assertThat(homePage.getChartCartInputValue()).isEqualTo(1)
     }
 }

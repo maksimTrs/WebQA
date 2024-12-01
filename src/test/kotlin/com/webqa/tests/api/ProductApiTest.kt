@@ -2,16 +2,15 @@ package com.webqa.tests.api
 
 import com.webqa.core.api.clients.AuthApiClient
 import com.webqa.core.api.clients.ProductApiClient
-import com.webqa.core.config.Configuration.userEmail
-import com.webqa.core.config.Configuration.userPass
 import com.webqa.core.utils.TestDataGenerator
+import com.webqa.tests.BaseTest
 import io.qameta.allure.Description
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.testng.annotations.BeforeClass
 import org.testng.annotations.Test
 
-class ProductApiTest {
+class ProductApiTest : BaseTest() {
     private lateinit var authApiClient: AuthApiClient
     private lateinit var productApiClient: ProductApiClient
     private lateinit var authToken: String
@@ -45,7 +44,7 @@ class ProductApiTest {
         val productQty = 1
         val cardDetails = TestDataGenerator.generateCardDetails()
 
-        val createOrderResponse = productApiClient.createOrder(
+        val orderResponse = productApiClient.createOrder(
             authToken = authToken,
             productId = productIdVal,
             quantity = productQty,
@@ -53,27 +52,27 @@ class ProductApiTest {
         )
 
         SoftAssertions().apply {
-            assertThat(createOrderResponse.transaction.id)
+            assertThat(orderResponse.transaction.id)
                 .`as`("Transaction ID")
                 .isNotNull()
 
-            assertThat(createOrderResponse.transaction.order.totalQuantity)
+            assertThat(orderResponse.transaction.order.totalQuantity)
                 .`as`("Order Quantity")
                 .isEqualTo(productQty)
 
-            assertThat(createOrderResponse.transaction.order.id)
+            assertThat(orderResponse.transaction.order.id)
                 .`as`("Order ID")
                 .isNotNull()
 
-            assertThat(createOrderResponse.transaction.order.totalSum)
+            assertThat(orderResponse.transaction.order.totalSum)
                 .`as`("Total Sum")
                 .isEqualTo(100)
 
-            assertThat(createOrderResponse.message)
+            assertThat(orderResponse.message)
                 .`as`("Order Message")
                 .isEqualTo("The 100usd purchase is successfully completed")
 
-            assertThat(createOrderResponse.transaction.order.products[0].product.id)
+            assertThat(orderResponse.transaction.order.products[0].product.id)
                 .`as`("Product ID")
                 .isEqualTo(productIdVal)
 
