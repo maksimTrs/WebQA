@@ -12,19 +12,31 @@ import org.openqa.selenium.firefox.FirefoxOptions
 object WebDriverFactory {
     enum class Browser { CHROME, FIREFOX }
 
+    private val driverThreadLocal: ThreadLocal<WebDriver> = ThreadLocal()
+
     fun createDriver(
         browser: Browser = getBrowserFromConfig(),
         windowSize: Dimension = Dimension(1920, 1080)
-    ): WebDriver = when (browser) {
-        CHROME -> createChromeDriver(windowSize)
-        FIREFOX -> createFirefoxDriver(windowSize)
+    ): WebDriver {
+        val driver = when (browser) {
+            CHROME -> createChromeDriver(windowSize)
+            FIREFOX -> createFirefoxDriver(windowSize)
+        }
+        driverThreadLocal.set(driver)
+        return driver
+    }
+
+    fun getDriver(): WebDriver = driverThreadLocal.get()
+
+    fun quitDriver() {
+        driverThreadLocal.get().quit()
+        driverThreadLocal.remove()
     }
 
     private fun createChromeDriver(windowSize: Dimension): WebDriver {
         WebDriverManager.chromedriver().setup()
         return ChromeDriver(ChromeOptions().apply {
             addArguments("--start-maximized")
-            //addArguments("--disable-notifications")
             addArguments("--disable-extensions")
             addArguments("--incognito")
         }).apply {

@@ -14,15 +14,15 @@ class LoginTest : BaseTest() {
 
     @BeforeMethod
     fun setup() {
-        homePage = HomePage(driver)
-        loginPage = LoginPage(driver)
-        driver.get(baseUrl)
+        homePage = HomePage(getDriver())
+        loginPage = LoginPage(getDriver())
+        getDriver().get(baseUrl)
     }
 
     @Test
     @Description("Verify successful login")
     fun testSuccessfulLogin() {
-        driver.get(baseUrl)
+        getDriver().get(baseUrl)
         homePage.clickLogin()
         loginPage.login(userEmail, userPass)
 

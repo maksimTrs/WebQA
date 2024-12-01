@@ -14,11 +14,11 @@ class ProductTest : BaseTest() {
 
     @BeforeMethod
     fun setup() {
-        homePage = HomePage(driver)
-        loginPage = LoginPage(driver)
+        homePage = HomePage(getDriver())
+        loginPage = LoginPage(getDriver())
 
         // Login before each test
-        driver.get(baseUrl)
+        getDriver().get(baseUrl)
         homePage.clickLogin()
         loginPage.login(userEmail, userPass)
 

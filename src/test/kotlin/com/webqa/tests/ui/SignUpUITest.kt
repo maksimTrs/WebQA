@@ -13,7 +13,7 @@ class SignUpUITest : BaseTest() {
 
     @BeforeMethod
     fun openSignUpPage() {
-        signUpPage = SignUpPage(driver)
+        signUpPage = SignUpPage(getDriver())
     }
 
     @Test

@@ -3,7 +3,7 @@
     <listeners>
         <listener class-name="com.webqa.core.listeners.TestListener"/>
     </listeners>
-    <test name="All Tests">
+    <test name="All Tests" parallel="methods" thread-count="2">
         <classes>
             <class name="com.webqa.tests.api.ProductApiTest"/>
             <class name="com.webqa.tests.api.SignUpAPITest"/>
