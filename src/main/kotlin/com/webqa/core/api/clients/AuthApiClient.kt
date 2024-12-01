@@ -1,13 +1,21 @@
 package com.webqa.core.api.clients
 
 import com.webqa.core.api.ApiClient
-import com.webqa.core.api.models.ApiSignUpResponse
+import com.webqa.core.api.models.SignUpRequest
+import com.webqa.core.api.models.SignUpResponse
 import io.restassured.module.kotlin.extensions.Extract
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
+import org.apache.http.HttpStatus.SC_OK
 
-class AuthApiClient : ApiClient(), IAuthApiClient<String, ApiSignUpResponse> {
+class AuthApiClient : ApiClient(), IAuthApiClient<String, SignUpResponse> {
+
+    companion object {
+        private const val LOGIN_ENDPOINT = "/user/login"
+        private const val SIGNUP_ENDPOINT = "/user/signup"
+    }
+
     override fun login(email: String, password: String): String {
         return Given {
             spec(requestSpec)
@@ -18,30 +26,24 @@ class AuthApiClient : ApiClient(), IAuthApiClient<String, ApiSignUpResponse> {
                 )
             )
         } When {
-            post("/user/login")
+            post(LOGIN_ENDPOINT)
         } Then {
-            statusCode(200)
+            statusCode(SC_OK)
         } Extract {
             path<String>("authToken")
         }
     }
 
-    override fun signup(email: String, password: String): ApiSignUpResponse {
+    override fun signup(request: SignUpRequest, statusCodeVal: Int): SignUpResponse {
         return Given {
             spec(requestSpec)
-            body(
-                mapOf(
-                    "email" to email,
-                    "password" to password,
-                    "passwordConfirm" to password
-                )
-            )
+            body(request)
         } When {
-            post("/user/signup")
+            post(SIGNUP_ENDPOINT)
         } Then {
-            statusCode(200)
+            statusCode(statusCodeVal)
         } Extract {
-            `as`(ApiSignUpResponse::class.java)
+            `as`(SignUpResponse::class.java)
         }
     }
 }

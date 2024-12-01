@@ -3,8 +3,10 @@
     <test name="All Tests">
         <classes>
             <class name="com.webqa.tests.api.ProductApiTest"/>
+            <class name="com.webqa.tests.api.SignUpAPITest"/>
             <class name="com.webqa.tests.ui.LoginTest"/>
             <class name="com.webqa.tests.ui.ProductTest"/>
+            <class name="com.webqa.tests.ui.SignUpUITest"/>
         </classes>
     </test>
 </suite>

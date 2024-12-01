@@ -7,6 +7,7 @@ import io.restassured.module.kotlin.extensions.Extract
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
+import org.apache.http.HttpStatus.SC_OK
 
 class ProductApiClient : ApiClient() {
     fun getProducts(authToken: String): ProductResponse {
@@ -16,7 +17,7 @@ class ProductApiClient : ApiClient() {
         } When {
             get("/product/")
         } Then {
-            statusCode(200)
+            statusCode(SC_OK)
         } Extract {
             `as`(ProductResponse::class.java)
         }
@@ -40,7 +41,7 @@ class ProductApiClient : ApiClient() {
         } When {
             post("/order/createAndPay")
         } Then {
-            statusCode(200)
+            statusCode(SC_OK)
         } Extract {
             `as`(ApiResponse::class.java)
         }

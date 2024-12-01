@@ -3,14 +3,14 @@ package com.webqa.tests.api
 import com.webqa.core.api.clients.AuthApiClient
 import com.webqa.core.api.clients.ProductApiClient
 import com.webqa.core.utils.TestDataGenerator
-import com.webqa.tests.BaseTest
+import com.webqa.tests.BaseApiTest
 import io.qameta.allure.Description
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.testng.annotations.BeforeClass
 import org.testng.annotations.Test
 
-class ProductApiTest : BaseTest() {
+class ProductApiTest : BaseApiTest() {
     private lateinit var authApiClient: AuthApiClient
     private lateinit var productApiClient: ProductApiClient
     private lateinit var authToken: String
@@ -21,7 +21,7 @@ class ProductApiTest : BaseTest() {
         productApiClient = ProductApiClient()
 
         // Login to get auth token
-        authToken = authApiClient.login(userEmail, userPass)
+        authToken = authApiClient.login(USER_EMAIL, USER_PASSWORD)
     }
 
     @Test
