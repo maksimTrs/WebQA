@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.9.0"
-    id("io.qameta.allure") version "2.12.0"
+    id("io.qameta.allure") version "2.11.2"
 }
 
 group = "com.webqa"
@@ -17,7 +17,7 @@ dependencies {
     implementation(kotlin("stdlib"))
 
     // Testing
-    testImplementation("org.testng:testng:7.7.1")
+    testImplementation("org.testng:testng:7.8.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
 
     // Assertions
@@ -32,8 +32,9 @@ dependencies {
     implementation("io.rest-assured:kotlin-extensions:5.3.1")
 
     // Allure
-    implementation("io.qameta.allure:allure-testng:2.29.0")
-    implementation("io.qameta.allure:allure-rest-assured:2.29.0")
+    implementation("io.qameta.allure:allure-testng:2.22.2")
+    implementation("io.qameta.allure:allure-rest-assured:2.22.2")
+    implementation("io.qameta.allure:allure-attachments:2.22.2")
 
     // Data Generation
     implementation("net.datafaker:datafaker:2.0.1")
@@ -47,11 +48,14 @@ dependencies {
 
     testImplementation("ch.qos.logback:logback-classic:1.4.11")
     testImplementation("org.slf4j:slf4j-api:2.0.9")
-    testImplementation("org.codehaus.janino:janino:3.1.10") // For colored console output
+    testImplementation("org.codehaus.janino:janino:3.1.10")
 }
 
 tasks.test {
-    useTestNG()
+    useTestNG {
+        useDefaultListeners = true
+    }
+    systemProperty("allure.results.directory", "build/allure-results")
 }
 
 tasks.withType<KotlinCompile> {
@@ -59,5 +63,5 @@ tasks.withType<KotlinCompile> {
 }
 
 allure {
-    version.set("2.22.2")
+    version = "2.22.2"
 }

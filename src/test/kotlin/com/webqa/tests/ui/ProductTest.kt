@@ -14,16 +14,20 @@ class ProductTest : BaseTest() {
 
     @BeforeMethod
     fun setup() {
+        getDriver().get(baseUrl)
+
+        // Initialize page objects after navigating to the page
         homePage = HomePage(getDriver())
         loginPage = LoginPage(getDriver())
 
         // Login before each test
-        getDriver().get(baseUrl)
         homePage.clickLogin()
         loginPage.login(userEmail, userPass)
+        homePage.waitForLoginComplete(userEmail)
 
         // Wait for successful login by checking the email is displayed
         assertThat(homePage.getLoggedInUserEmail())
+            .withFailMessage("Login failed or user email not displayed")
             .isEqualTo(userEmail)
     }
 
@@ -31,6 +35,7 @@ class ProductTest : BaseTest() {
     @Description("Verify products are displayed for logged in user")
     fun testProductsDisplayed() {
         assertThat(homePage.getProductsCount())
+            .withFailMessage("Expected 5 products to be displayed")
             .isEqualTo(5)
     }
 

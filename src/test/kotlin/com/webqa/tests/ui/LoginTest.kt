@@ -22,7 +22,6 @@ class LoginTest : BaseTest() {
     @Test
     @Description("Verify successful login")
     fun testSuccessfulLogin() {
-        getDriver().get(baseUrl)
         homePage.clickLogin()
         loginPage.login(userEmail, userPass)
 

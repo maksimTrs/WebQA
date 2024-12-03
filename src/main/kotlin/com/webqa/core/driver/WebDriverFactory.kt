@@ -12,12 +12,14 @@ import org.openqa.selenium.firefox.FirefoxOptions
 object WebDriverFactory {
     enum class Browser { CHROME, FIREFOX }
 
-    private val driverThreadLocal: ThreadLocal<WebDriver> = ThreadLocal()
+    private val driverThreadLocal = ThreadLocal<WebDriver>()
 
+    @Synchronized
     fun createDriver(
         browser: Browser = getBrowserFromConfig(),
         windowSize: Dimension = Dimension(1920, 1080)
     ): WebDriver {
+        quitDriver() // Ensure we don't have any leftover driver in this thread
         val driver = when (browser) {
             CHROME -> createChromeDriver(windowSize)
             FIREFOX -> createFirefoxDriver(windowSize)
@@ -26,11 +28,18 @@ object WebDriverFactory {
         return driver
     }
 
-    fun getDriver(): WebDriver = driverThreadLocal.get()
 
+    @Synchronized
     fun quitDriver() {
-        driverThreadLocal.get().quit()
-        driverThreadLocal.remove()
+        val driver = driverThreadLocal.get()
+        try {
+            driver?.quit()
+        } catch (e: Exception) {
+            // Log the exception but don't throw it
+            println("Error quitting driver: ${e.message}")
+        } finally {
+            driverThreadLocal.remove()
+        }
     }
 
     private fun createChromeDriver(windowSize: Dimension): WebDriver {
